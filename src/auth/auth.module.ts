@@ -9,7 +9,6 @@ import { UserModule } from '../users/user.module';
 
 import { LocalStrategy } from './local/local.strategy';
 import { JwtStrategy } from './jwt/jwt.strategy';
-
 import { JwtAuthGuard } from './jwt/jwt-auth.guard';
 
 import { AuthService } from './auth.service';

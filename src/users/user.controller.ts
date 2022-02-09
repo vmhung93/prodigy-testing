@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Post, Request } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Put, Request } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { UserService } from './user.service';
 
@@ -11,6 +11,7 @@ import { AllowAnonymous } from '../utils/decorators/allow-anonymous.decorator';
 import { Role } from '../common/enums/role.enum';
 
 @ApiTags('User')
+@ApiBearerAuth()
 @Controller('users')
 export class UserController {
   constructor(private userService: UserService) {}
@@ -27,7 +28,7 @@ export class UserController {
   }
 
   @AllowAnonymous()
-  @Post('upgrade-permission')
+  @Put('upgrade-permission')
   async upgrade(@Body() dto: any) {
     return await this.userService.updateRoles(dto.userId, [
       Role.User,
