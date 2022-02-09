@@ -4,6 +4,8 @@ import { InjectModel } from '@nestjs/mongoose';
 
 import { Product, ProductDocument } from '../schemas/product.schema';
 
+import { IPaginationOptions } from '../common/interfaces/pagination.interface';
+
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 
@@ -12,6 +14,28 @@ export class ProductService {
   constructor(
     @InjectModel(Product.name) private productModel: Model<ProductDocument>,
   ) {}
+
+  async get(
+    keyword: string,
+    paginationOptions: IPaginationOptions,
+  ): Promise<any> {
+    const filterOptions = {
+      $or: [
+        { title: new RegExp(keyword, 'i') },
+        { description: new RegExp(keyword, 'i') },
+        { brand: new RegExp(keyword, 'i') },
+        { type: new RegExp(keyword, 'i') },
+      ],
+    };
+
+    const total = await this.productModel.count(filterOptions);
+    const data = await this.productModel
+      .find(filterOptions)
+      .skip((paginationOptions.page - 1) * paginationOptions.limit)
+      .limit(paginationOptions.limit);
+
+    return { data, total };
+  }
 
   async getMostViewed(): Promise<Product> {
     return this.productModel.findOne({}, {}, { sort: { viewed: -1 } });
