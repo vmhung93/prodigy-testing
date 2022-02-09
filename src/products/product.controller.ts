@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 import { ProductService } from './product.service';
 
@@ -9,6 +9,7 @@ import { Auth } from '../utils/decorators/auth.decorator';
 import { AllowAnonymous } from '../utils/decorators/allow-anonymous.decorator';
 
 import { Role } from '../common/enums/role.enum';
+import { IPaginationOptions } from '../common/interfaces/pagination.interface';
 
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -18,6 +19,19 @@ import { UpdateProductDto } from './dto/update-product.dto';
 @Controller('products')
 export class ProductController {
   constructor(private productService: ProductService) {}
+
+  @Get()
+  @ApiQuery({ name: 'keyword', type: String })
+  @ApiQuery({ name: 'limit', type: Number, required: false })
+  @ApiQuery({ name: 'page', type: Number, required: false })
+  async get(@Query() query: IPaginationOptions | any): Promise<any> {
+    const paginationOptions: IPaginationOptions = {
+      page: parseInt(query.page as any) || 1,
+      limit: parseInt(query.limit as any) || 10,
+    };
+
+    return await this.productService.get(query.keyword, paginationOptions);
+  }
 
   @Get('most-viewed')
   @Auth(Role.Admin)

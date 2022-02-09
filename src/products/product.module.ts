@@ -9,7 +9,12 @@ import { ProductController } from './product.controller';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Product.name, schema: ProductSchema }]),
+    MongooseModule.forFeature([
+      {
+        name: Product.name,
+        schema: ProductSchema,
+      },
+    ]),
   ],
   controllers: [ProductController],
   providers: [ProductService],
