@@ -10,6 +10,7 @@ import { UserModule } from './users/user.module';
 import { AuthModule } from './auth/auth.module';
 import { ProductModule } from './products/product.module';
 import { ResourceModule } from './resources/resource.module';
+import { WishListModule } from './wishlist/wishlist.module';
 
 import { AppController } from './app.controller';
 
@@ -32,6 +33,7 @@ import { AppService } from './app.service';
     UserModule,
     AuthModule,
     ProductModule,
+    WishListModule,
     ResourceModule,
   ],
   controllers: [AppController],
