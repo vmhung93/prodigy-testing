@@ -21,7 +21,7 @@ export class ProductController {
   constructor(private productService: ProductService) {}
 
   @Get()
-  @ApiQuery({ name: 'keyword', type: String })
+  @ApiQuery({ name: 'keyword', type: String, required: false })
   @ApiQuery({ name: 'limit', type: Number, required: false })
   @ApiQuery({ name: 'page', type: Number, required: false })
   async get(@Query() query: IPaginationOptions | any): Promise<any> {
@@ -33,16 +33,16 @@ export class ProductController {
     return await this.productService.get(query.keyword, paginationOptions);
   }
 
-  @Get(':id')
-  @ApiParam({ name: 'id', type: String })
-  async getById(@Param() params): Promise<Product> {
-    return await this.productService.getById(params.id);
-  }
-
   @Get('most-viewed')
   @Auth(Role.Admin)
   async getMostViewed(): Promise<Product> {
     return await this.productService.getMostViewed();
+  }
+
+  @Get(':id')
+  @ApiParam({ name: 'id', type: String })
+  async getById(@Param() params): Promise<Product> {
+    return await this.productService.getById(params.id);
   }
 
   @Post()
