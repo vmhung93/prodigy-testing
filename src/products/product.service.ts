@@ -37,6 +37,10 @@ export class ProductService {
     return { data, total };
   }
 
+  async getById(id: string): Promise<Product> {
+    return this.productModel.findById(id);
+  }
+
   async getMostViewed(): Promise<Product> {
     return this.productModel.findOne({}, {}, { sort: { viewed: -1 } });
   }

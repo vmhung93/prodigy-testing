@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
-import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 import { ProductService } from './product.service';
 
@@ -31,6 +31,12 @@ export class ProductController {
     };
 
     return await this.productService.get(query.keyword, paginationOptions);
+  }
+
+  @Get(':id')
+  @ApiParam({ name: 'id', type: String })
+  async getById(@Param() params): Promise<Product> {
+    return await this.productService.getById(params.id);
   }
 
   @Get('most-viewed')

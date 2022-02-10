@@ -1,7 +1,10 @@
 import { Request, Controller, Param, Post, Get, Delete } from '@nestjs/common';
 import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
 
-import { WishList } from 'src/schemas/wish-list.schema';
+import { WishList } from '../schemas/wish-list.schema';
+
+import { AllowAnonymous } from '../utils/decorators/allow-anonymous.decorator';
+
 import { CreateWishListDto } from './dto/create-wish-list.dto';
 
 import { WishListService } from './wishlist.service';
@@ -15,6 +18,12 @@ export class WishListController {
   @Get()
   async get(@Request() req): Promise<WishList[]> {
     return await this.wishListService.get(req.user.id);
+  }
+
+  @Get('most-listed')
+  @AllowAnonymous()
+  async getMostListed(): Promise<WishList> {
+    return await this.wishListService.getMostListed();
   }
 
   @Post(':productId')

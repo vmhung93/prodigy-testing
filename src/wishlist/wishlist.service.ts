@@ -33,4 +33,14 @@ export class WishListService {
       product: dto.productId,
     });
   }
+
+  async getMostListed(): Promise<WishList> {
+    const data = await this.wishListModel.aggregate([
+      { $sortByCount: '$product' },
+    ]);
+
+    return await await this.wishListModel
+      .findOne({ product: data[0]._id })
+      .populate({ path: 'product' });
+  }
 }
