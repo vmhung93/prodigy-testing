@@ -19,18 +19,23 @@ export class ProductService {
     keyword: string,
     paginationOptions: IPaginationOptions,
   ): Promise<any> {
-    const filterOptions = {
-      $or: [
-        { title: new RegExp(keyword, 'i') },
-        { description: new RegExp(keyword, 'i') },
-        { brand: new RegExp(keyword, 'i') },
-        { type: new RegExp(keyword, 'i') },
-      ],
-    };
+    let filterOptions = {};
+
+    if (keyword && keyword !== '') {
+      filterOptions = {
+        $or: [
+          { title: new RegExp(keyword, 'i') },
+          { description: new RegExp(keyword, 'i') },
+          { brand: new RegExp(keyword, 'i') },
+          { type: new RegExp(keyword, 'i') },
+        ],
+      };
+    }
 
     const total = await this.productModel.count(filterOptions);
     const data = await this.productModel
       .find(filterOptions)
+      .sort('-createdAt')
       .skip((paginationOptions.page - 1) * paginationOptions.limit)
       .limit(paginationOptions.limit);
 

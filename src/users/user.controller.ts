@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Put, Request } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiProperty, ApiTags } from '@nestjs/swagger';
 
 import { UserService } from './user.service';
 
@@ -29,6 +29,14 @@ export class UserController {
 
   @AllowAnonymous()
   @Put('upgrade-permission')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        userId: { type: 'string' },
+      },
+    },
+  })
   async upgrade(@Body() dto: any) {
     return await this.userService.updateRoles(dto.userId, [
       Role.User,
