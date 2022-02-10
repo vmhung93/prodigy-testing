@@ -11,6 +11,7 @@ import { AuthModule } from './auth/auth.module';
 import { ProductModule } from './products/product.module';
 import { ResourceModule } from './resources/resource.module';
 import { WishListModule } from './wishlist/wishlist.module';
+import { LoggingModule } from './logging/logging.module';
 
 import { AppController } from './app.controller';
 
@@ -30,6 +31,7 @@ import { AppService } from './app.service';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'assets'),
     }),
+    LoggingModule,
     UserModule,
     AuthModule,
     ProductModule,
