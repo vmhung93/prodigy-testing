@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import {
   MongooseModuleOptions,
   MongooseOptionsFactory,
@@ -6,9 +7,15 @@ import {
 
 @Injectable()
 export class MongooseConfig implements MongooseOptionsFactory {
+  constructor(private configService: ConfigService) {}
+
   createMongooseOptions(): MongooseModuleOptions {
+    const dbConnection = this.configService.get<string>(
+      'DATABASE_CONNECTION_STRING',
+    );
+
     return {
-      uri: 'mongodb://localhost/prodigy-testing',
+      uri: dbConnection,
     };
   }
 }
