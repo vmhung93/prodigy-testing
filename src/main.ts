@@ -8,11 +8,21 @@ import {
 
 import { AppModule } from './app.module';
 
+import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
+
+import { LoggingService } from './logging/logging.service';
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // Validation
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
+
+  // Exception fitler
+  app.useGlobalFilters(new AllExceptionsFilter(app.get(LoggingService)));
+
+  // CORS
+  app.enableCors();
 
   // Swagger
   const config = new DocumentBuilder()
